@@ -3,6 +3,7 @@
 import httplib2
 import os
 import sys
+import csv
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -108,9 +109,17 @@ def getVideoIdBySearch(string):
   search_response = search_request.execute()
   return search_response['items'][0]['id']['videoId']
 
+
+
 plid = createPlayList("플레이리스트","긁어온거2")
-for title in range:
-    vid = getVideoIdBySearch("temp")
+
+file = open("melon100_utf8.csv", 'r', encoding = 'utf-8-sig')
+rdr = csv.reader(file)
+for line in rdr:
+    searchWord = line[0] + ' ' + line[1]
+    vid = getVideoIdBySearch(searchWord)
     insertionToPlayList(plid, vid)
+file.close()
+
 ytlink = ytlinkfront + plid
 print(ytlink)
