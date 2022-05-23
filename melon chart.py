@@ -39,10 +39,10 @@ j = 0
 
 for i in lst50:
     temp = []
-    temp.append(i.select_one('.rank').text)  #순위 가져오기
+    #temp.append(i.select_one('.rank').text)  #순위 가져오기
     temp.append(i.select_one('.ellipsis.rank01').a.text) #제목 가져오기
-    temp.append(i.select_one('.ellipsis.rank02').a.text) #아티스트 가져오기
-    temp.append(i.select_one('.ellipsis.rank03').a.text) #곡명
+    #temp.append(i.select_one('.ellipsis.rank02').a.text) #아티스트 가져오기
+    #temp.append(i.select_one('.ellipsis.rank03').a.text) #앨범 가져오기
     temp.append(genre1[j])
     melonList.append(temp)
     j+=1
@@ -71,7 +71,8 @@ for i in lst50:
 #####담은 정보를 파일로 저장하기#####
 with open('melon100_utf8.csv', 'w', encoding='utf-8-sig', newline='') as f:
     writer = csv.writer(f)
-    writer.writerow(['순위', '아티스트', '곡명', '앨범', '장르'])
+    #writer.writerow(['순위', '곡명', '아티스트', '앨범', '장르'])
+    writer.writerow(['곡명', '장르'])
     writer.writerows(melonList)
 
 #with open('melon100_cp949.csv', 'w', encoding='cp949', newline='') as f:
