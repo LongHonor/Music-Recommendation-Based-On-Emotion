@@ -1,8 +1,9 @@
+from os import link
 import tkinter
 import webbrowser
 import recording as rc
 
-#import createPlaylist as cp
+import createPlaylist as cp
 
 def callback(url):
     webbrowser.open_new(url)
@@ -21,6 +22,7 @@ window.geometry("640x400+100+100")
 window.resizable(False, False)
 
 recorder = rc.recorder()
+linkCreater = cp.playlistCreater()
 
 startButton = tkinter.Button(text="start", bg = 'white')
 startButton.pack()
@@ -31,8 +33,12 @@ startButton.bind("<Button-1>", recorder.startRecording)
 # stopButton.pack()
 # stopButton.bind("<Button-1>", recorder.stopRecording)
 
+playlistButton = tkinter.Button(text="create playlist")
+playlistButton.pack()
+playlistButton.bind("<Button-1>",linkCreater.resultingPlaylist)
+
 ytLink = tkinter.Label(window, text = "Youtube Hyperlink", fg = "blue", cursor="hand2")
 ytLink.pack()
-ytLink.bind("<Button-1>", lambda e: callback("http://www.youtube.com"))
+ytLink.bind("<Button-1>", lambda e: callback(linkCreater.playlink))
 
 window.mainloop()

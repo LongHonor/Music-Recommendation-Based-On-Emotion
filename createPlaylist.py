@@ -4,6 +4,7 @@ import httplib2
 import os
 import sys
 import csv
+from datetime import datetime
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -64,62 +65,67 @@ youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
 
 ytlinkfront = "https://www.youtube.com/playlist?list="
 
-# 플레이리스트 만들기
-def createPlayList(plTitle, plDescription):
-  playlists_insert_response = youtube.playlists().insert(
-    part = "snippet, status",
-    body = dict(
-      snippet=dict(
-        title = plTitle,
-        description = plDescription
-      ),
-      status=dict(
-        privacyStatus="public"
-      )
-    )
-  ).execute()
-  
-  return playlists_insert_response["id"]
+class playlistCreater:
+  def __init__(self):
+    self.playlink = ""
 
-#플레이리스트에 동영상 추가
-def insertionToPlayList(playlist, vid):
-  playlistsItems_insert_request = youtube.playlistItems().insert(
-    part = "snippet",
-    body = {
-      'snippet': {
-        'playlistId' : playlist,
-        'resourceId' : {
-          'kind' : 'youtube#video',
-          'videoId' : vid
+  # 플레이리스트 만들기
+  def createPlayList(self, plTitle, plDescription):
+    playlists_insert_response = youtube.playlists().insert(
+      part = "snippet, status",
+      body = dict(
+        snippet=dict(
+          title = plTitle,
+          description = plDescription
+        ),
+        status=dict(
+          privacyStatus="public"
+        )
+      )
+    ).execute()
+    
+    return playlists_insert_response["id"]
+
+  #플레이리스트에 동영상 추가
+  def insertionToPlayList(self, playlist, vid):
+    playlistsItems_insert_request = youtube.playlistItems().insert(
+      part = "snippet",
+      body = {
+        'snippet': {
+          'playlistId' : playlist,
+          'resourceId' : {
+            'kind' : 'youtube#video',
+            'videoId' : vid
+          }
         }
       }
-    }
-  )
+    )
 
-  playlistsItems_insert_response = playlistsItems_insert_request.execute()
+    playlistsItems_insert_response = playlistsItems_insert_request.execute()
 
-#검색해서 vid 찾기
-def getVideoIdBySearch(string):
-  search_request = youtube.search().list(
-    q = string,
-    order = "relevance",
-    part = "id, snippet",
-    maxResults = 1
-  )
-  search_response = search_request.execute()
-  return search_response['items'][0]['id']['videoId']
+  #검색해서 vid 찾기
+  def getVideoIdBySearch(self, string):
+    search_request = youtube.search().list(
+      q = string,
+      order = "relevance",
+      part = "id, snippet",
+      maxResults = 1
+    )
+    search_response = search_request.execute()
+    return search_response['items'][0]['id']['videoId']
 
+  def resultingPlaylist(self,tmp):
+    title = datetime.today().strftime("%Y%m%d")
+    description = title + "의 플레이리스트"
+    plid = self.createPlayList(title, description)
 
+    file = open("melon100_utf8.csv", 'r', encoding = 'utf-8-sig')
+    rdr = csv.reader(file)
+    for line in rdr:
+        searchWord = line[0] + ' ' + line[1]
+        vid = self.getVideoIdBySearch(searchWord)
+        self.insertionToPlayList(plid, vid)
+    file.close()
 
-plid = createPlayList("플레이리스트","긁어온거2")
-
-file = open("melon100_utf8.csv", 'r', encoding = 'utf-8-sig')
-rdr = csv.reader(file)
-for line in rdr:
-    searchWord = line[0] + ' ' + line[1]
-    vid = getVideoIdBySearch(searchWord)
-    insertionToPlayList(plid, vid)
-file.close()
-
-ytlink = ytlinkfront + plid
-print(ytlink)
+    self.playlink = ytlinkfront + plid
+    print(self.playlink)

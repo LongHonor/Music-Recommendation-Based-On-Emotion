@@ -10,9 +10,14 @@ class recorder:
         self.stream = self.audio.open(format = pyaudio.paInt16, channels=1, rate = 44100, input = True, frames_per_buffer = 1024)
         self.frames = []
         self.status = False
+        self.index = 0
+        self.titlePre = "temp"
+        self.title = ""
 
-    def startRecording(self):
+    def startRecording(self, tmp):
         print("start")
+        self.index+=1
+        self.title = self.titlePre +str(self.index)+ ".wav"
         self.status = True
         start_time = time.time()
         end_time = start_time
@@ -32,7 +37,8 @@ class recorder:
             self.saveRecording()
 
     def saveRecording(self):
-        sound_file = wave.open("tmp.wav","wb")
+        
+        sound_file = wave.open(self.title,"wb")
         sound_file.setnchannels(1)
         sound_file.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
         sound_file.setframerate(44100)
