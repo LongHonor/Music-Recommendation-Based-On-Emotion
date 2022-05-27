@@ -10,14 +10,13 @@ class recorder:
         self.stream = self.audio.open(format = pyaudio.paInt16, channels=1, rate = 44100, input = True, frames_per_buffer = 1024)
         self.frames = []
         self.status = False
-        self.index = 0
         self.titlePre = "temp"
         self.title = ""
 
     def startRecording(self, tmp):
         print("start")
-        self.index+=1
-        self.title = self.titlePre +str(self.index)+ ".wav"
+        self.__init__()
+        self.title = self.titlePre + ".wav"
         self.status = True
         start_time = time.time()
         end_time = start_time

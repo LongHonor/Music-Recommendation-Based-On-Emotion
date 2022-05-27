@@ -2,7 +2,7 @@ from os import link
 import tkinter
 import webbrowser
 import recording as rc
-
+#import sth
 import createPlaylist as cp
 
 def callback(url):
@@ -27,7 +27,10 @@ linkCreater = cp.playlistCreater()
 startButton = tkinter.Button(text="start", bg = 'white')
 startButton.pack()
 startButton.bind("<Button-1>", recorder.startRecording)
-# startButton.bind("<Button-1>", recording(recorder, startButton))
+
+makelistButton = tkinter.Button()
+makelistButton.pack()
+makelistButton.bind("<Button-1>",)
 
 # stopButton = tkinter.Button(text="stop")
 # stopButton.pack()
