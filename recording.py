@@ -2,6 +2,7 @@
 
 import pyaudio
 import wave
+import time
 
 class recorder:
     def __init__(self) -> None:
@@ -10,14 +11,18 @@ class recorder:
         self.frames = []
         self.status = False
 
-    def startRecording(self, tmp):
+    def startRecording(self):
         print("start")
         self.status = True
-        while(self.status):
+        start_time = time.time()
+        end_time = start_time
+        while(end_time - start_time < 5):
             data = self.stream.read(1024)
             self.frames.append(data)
+            end_time = time.time()
+        self.stopRecording()
 
-    def stopRecording(self, tmp):
+    def stopRecording(self):
         print("stop")
         if(self.status == True):
             self.status = False
@@ -35,8 +40,4 @@ class recorder:
         sound_file.close()
 
 # recorderInstance = recorder()
-
-# try:
-#     recorderInstance.startRecording("asdf")
-# except KeyboardInterrupt:
-#     recorderInstance.stopRecording("asdf")
+# recorderInstance.startRecording()
