@@ -3,7 +3,6 @@ import urllib.request
 from bs4 import BeautifulSoup
 import time
 import csv
-from selenium import webdriver
 
 #####웹 사이트 정보 해석 및 읽어오기#####
 hdr = { 'User-Agent' : 'Mozilla/5.0' }
@@ -31,27 +30,86 @@ for j in range(0,100):
     soup2 = BeautifulSoup(html2, 'html.parser')
     attr = soup2.select_one('dl')
     genre = attr.select('dd')
-    if ', ' in genre[2].text:
-        if '댄스' in genre[2].text:
-            genre1.append('댄스')
-        elif '록/메탈' in genre[2].text:
-            genre1.append('록/메탈')
-        elif 'POP' in genre[2].text:
-            genre1.append('POP')
-        elif 'R&B/Soul' in genre[2].text:
-            genre1.append('R&B/Soul')
-        elif '랩/힙합' in genre[2].text:
-            genre1.append('랩/힙합')
-        elif '발라드' in genre[2].text:
-            genre1.append('발라드')
-        elif '성인가요/트로트' in genre[2].text:
-            genre1.append('성인가요/트로트')
-        elif '포크/블루스' in genre[2].text:
-            genre1.append('포크/블루스')
-        elif '재즈' in genre[2].text:
-            genre1.append('재즈')
-    else:
-        genre1.append(genre[2].text)
+    switch (answer[0]){
+        case 'happy':{
+            if ', ' in genre[2].text:
+                if '댄스' in genre[2].text:
+                    genre1.append('댄스')
+                elif '성인가요/트로트' in genre[2].text:
+                    genre1.append('성인가요/트로트')
+                elif '랩/힙합' in genre[2].text:
+                    genre1.append('랩/힙합')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'sad':{
+            if ', ' in genre[2].text:
+                if '발라드' in genre[2].text:
+                    genre1.append('발라드')
+                elif '재즈' in genre[2].text:
+                    genre1.append('재즈')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'angry':{
+            if ', ' in genre[2].text:
+                if '발라드' in genre[2].text:
+                    genre1.append('발라드')
+                elif '록/메탈' in genre[2].text:
+                    genre1.append('록/메탈')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'disgust':{
+            if ', ' in genre[2].text:
+                if '댄스' in genre[2].text:
+                    genre1.append('댄스')
+                elif '성인가요/트로트' in genre[2].text:
+                    genre1.append('성인가요/트로트')
+                elif '랩/힙합' in genre[2].text:
+                    genre1.append('랩/힙합')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'calm':{
+            if ', ' in genre[2].text:
+                if '댄스' in genre[2].text:
+                    genre1.append('댄스')
+                elif '발라드' in genre[2].text:
+                    genre1.append('발라드')
+                elif 'POP' in genre[2].text:
+                    genre1.append('POP')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'neutral':{
+            if ', ' in genre[2].text:
+                if '댄스' in genre[2].text:
+                    genre1.append('댄스')
+                elif '발라드' in genre[2].text:
+                    genre1.append('발라드')
+                elif 'POP' in genre[2].text:
+                    genre1.append('POP')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'surprised':{
+            if ', ' in genre[2].text:
+                if 'POP' in genre[2].text:
+                    genre1.append('POP')
+                elif '랩/힙합' in genre[2].text:
+                    genre1.append('랩/힙합')
+            else:
+                genre1.append(genre[2].text)
+            }
+        case 'fearful':{
+            if ', ' in genre[2].text:
+                if '포크/블루스' in genre[2].text:
+                    genre1.append('포크/블루스')
+            else:
+                genre1.append(genre[2].text)
+            }
+    }
 
 j = 0
 
