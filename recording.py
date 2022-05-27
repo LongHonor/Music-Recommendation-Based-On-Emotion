@@ -3,27 +3,40 @@
 import pyaudio
 import wave
 
-audio = pyaudio.PyAudio()
+class recorder:
+    def __init__(self) -> None:
+        self.audio = pyaudio.PyAudio()
+        self.stream = self.audio.open(format = pyaudio.paInt16, channels=1, rate = 44100, input = True, frames_per_buffer = 1024)
+        self.frames = []
+        self.status = False
 
-stream = audio.open(format = pyaudio.paInt16, channels=1, rate = 44100, input = True, frames_per_buffer = 1024)
+    def startRecording(self, tmp):
+        print("start")
+        self.status = True
+        while(self.status):
+            data = self.stream.read(1024)
+            self.frames.append(data)
 
-frames = []
+    def stopRecording(self, tmp):
+        print("stop")
+        if(self.status == True):
+            self.status = False
+            self.stream.stop_stream()
+            self.stream.close()
+            self.audio.terminate()
+            self.saveRecording()
 
-try:
-    while True:
-        data = stream.read(1024)
-        frames.append(data)
+    def saveRecording(self):
+        sound_file = wave.open("tmp.wav","wb")
+        sound_file.setnchannels(1)
+        sound_file.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
+        sound_file.setframerate(44100)
+        sound_file.writeframes(b''.join(self.frames))
+        sound_file.close()
 
-except KeyboardInterrupt:
-    pass
+# recorderInstance = recorder()
 
-stream.stop_stream()
-stream.close()
-audio.terminate()
-
-sound_file = wave.open("recordedVoice.wav","wb")
-sound_file.setnchannels(1)
-sound_file.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
-sound_file.setframerate(44100)
-sound_file.writeframes(b''.join(frames))
-sound_file.close()
+# try:
+#     recorderInstance.startRecording("asdf")
+# except KeyboardInterrupt:
+#     recorderInstance.stopRecording("asdf")
