@@ -2,28 +2,48 @@
 
 import pyaudio
 import wave
+import time
 
-audio = pyaudio.PyAudio()
+class recorder:
+    def __init__(self) -> None:
+        self.audio = pyaudio.PyAudio()
+        self.stream = self.audio.open(format = pyaudio.paInt16, channels=1, rate = 44100, input = True, frames_per_buffer = 1024)
+        self.frames = []
+        self.status = False
+        self.index = 0
+        self.titlePre = "temp"
+        self.title = ""
 
-stream = audio.open(format = pyaudio.paInt16, channels=1, rate = 44100, input = True, frames_per_buffer = 1024)
+    def startRecording(self, tmp):
+        print("start")
+        self.index+=1
+        self.title = self.titlePre +str(self.index)+ ".wav"
+        self.status = True
+        start_time = time.time()
+        end_time = start_time
+        while(end_time - start_time < 5):
+            data = self.stream.read(1024)
+            self.frames.append(data)
+            end_time = time.time()
+        self.stopRecording()
 
-frames = []
+    def stopRecording(self):
+        print("stop")
+        if(self.status == True):
+            self.status = False
+            self.stream.stop_stream()
+            self.stream.close()
+            self.audio.terminate()
+            self.saveRecording()
 
-try:
-    while True:
-        data = stream.read(1024)
-        frames.append(data)
+    def saveRecording(self):
+        
+        sound_file = wave.open(self.title,"wb")
+        sound_file.setnchannels(1)
+        sound_file.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
+        sound_file.setframerate(44100)
+        sound_file.writeframes(b''.join(self.frames))
+        sound_file.close()
 
-except KeyboardInterrupt:
-    pass
-
-stream.stop_stream()
-stream.close()
-audio.terminate()
-
-sound_file = wave.open("recordedVoice.wav","wb")
-sound_file.setnchannels(1)
-sound_file.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
-sound_file.setframerate(44100)
-sound_file.writeframes(b''.join(frames))
-sound_file.close()
+# recorderInstance = recorder()
+# recorderInstance.startRecording()
