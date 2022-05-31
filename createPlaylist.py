@@ -13,6 +13,8 @@ from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 from tkinter import messagebox
 
+
+
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
 # the OAuth 2.0 information for this application, including its client_id and
 # client_secret. You can acquire an OAuth 2.0 client ID and client secret from
@@ -29,15 +31,11 @@ CLIENT_SECRETS_FILE = "client_secrets.json"
 # missing.
 MISSING_CLIENT_SECRETS_MESSAGE = """
 WARNING: Please configure OAuth 2.0
-
 To make this sample run you will need to populate the client_secrets.json file
 found at:
-
    %s
-
 with information from the API Console
 https://console.developers.google.com/
-
 For more information about the client_secrets.json file format, please visit:
 https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 """ % os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -119,14 +117,13 @@ class playlistCreater:
     description = title + "의 플레이리스트"
     plid = self.createPlayList(title, description)
 
-    file = open("classified_utf8.csv", 'r', encoding = 'utf-8-sig')
+    file = open("classified_melonList.csv", 'r', encoding = 'utf-8-sig')
     rdr = csv.reader(file)
     for line in rdr:
         searchWord = line[0] + ' ' + line[1]
         vid = self.getVideoIdBySearch(searchWord)
         self.insertionToPlayList(plid, vid)
-    file.close()
-
     self.playlink = ytlinkfront + plid
+    file.close()
     print(self.playlink)
-    messagebox.showinfo("작업 완료", "플레이리스트 생성완료")
+    messagebox.showinfo("작업완료","플레이리스트 생성 완료")
