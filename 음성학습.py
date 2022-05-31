@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import pandas as pd
 import numpy as np
 import sklearn
@@ -11,21 +5,12 @@ import os
 from os.path import join
 
 
-# In[2]:
-
-
-path = 'C:/Users/arz61/OneDrive/바탕 화면/4학년 1학기 홍혁기/오픈소스SW개론/melon chart/음성인식을통한 감정분류'
+path = './'
 file_list = os.listdir(path)
 file_list_py = [file for file in file_list if file.endswith('.csv')]
 
 
-# In[3]:
-
-
 file_list_py
-
-
-# In[4]:
 
 
 pd_sample = pd.read_csv(path + '/' +file_list_py[0])
@@ -33,13 +18,7 @@ pd_test = pd.read_csv(path + '/' +file_list_py[1])
 pd_train = pd.read_csv(path + '/' +file_list_py[2])
 
 
-# In[5]:
-
-
 pd_train
-
-
-# In[6]:
 
 
 import librosa
@@ -62,13 +41,11 @@ def load_audiofiles(file_name, sample_rate=48000):
     return signal
 
 
-# In[7]:
-
 
 from tqdm import tqdm
 def load_data(data_info, isTrain=True):
     
-    PATH = "C:/Users/arz61/OneDrive/바탕 화면/4학년 1학기 홍혁기/오픈소스SW개론/melon chart/음성인식을통한 감정분류"
+    PATH = "./"
     if isTrain:
         train_data = []#음성 feature들을 담는 dictionary
         train_label = []#학습에 사용할 label을 담는 list
@@ -98,34 +75,13 @@ train_data, train_label = load_data(pd_train)
 test_data = load_data(pd_test, isTrain=False)
 
 
-# In[8]:
-
-
 train_data.shape
-
-
-# In[50]:
-
-
-
-
-
-# In[9]:
 
 
 from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
 le.fit(train_label)
 y_train = le.transform(train_label)
-
-
-# In[ ]:
-
-
-
-
-
-# In[51]:
 
 
 def Calculate_Melspectrogram(audio, sample_rate):
@@ -165,19 +121,10 @@ mel_test = np.stack(mel_test,axis=0)
 print(f'mel_train:{mel_train.shape}, mel_test:{mel_test.shape}')
 
 
-# In[57]:
-
-
 mel_test[0].shape
 
 
-# In[58]:
-
-
 mel_test[0]
-
-
-# In[59]:
 
 
 from sklearn.preprocessing import StandardScaler
@@ -198,25 +145,12 @@ x_test = scaler.transform(x_test)
 x_test = np.reshape(x_test, newshape=(b,c,h,w))
 
 
-# In[60]:
-
-
 print(b,c,h,w)
-
-
-# In[63]:
 
 
 x_test[0].shape
 
-
-# In[73]:
-
-
 x_test[0]
-
-
-# In[12]:
 
 
 import torch
@@ -296,13 +230,7 @@ model = ParallelModel(num_emotions=8).to(device)
 print('Number of trainable params: ',sum(p.numel() for p in model.parameters()) )
 
 
-# In[13]:
-
-
 get_ipython().system('pip install livelossplot')
-
-
-# In[14]:
 
 
 EPOCHS=300
@@ -312,14 +240,8 @@ BATCH_SIZE = 64
 OPTIMIZER = torch.optim.SGD(model.parameters(),lr=1e-2, momentum=0.9)
 
 
-# In[15]:
-
-
 def loss_fnc(predictions, targets):
     return nn.CrossEntropyLoss()(input=predictions,target=targets)
-
-
-# In[16]:
 
 
 from livelossplot import PlotLosses
@@ -369,21 +291,9 @@ for epoch in trange(EPOCHS):
     liveloss.draw()
 
 
-# In[17]:
-
 
 model
 
 
-# In[18]:
-
-
-path = r'C:\Users\arz61\Documents\오픈소스'
+path = './'
 torch.save(model,os.path.join(path,'model_300.pth'))
-
-
-# In[ ]:
-
-
-
-

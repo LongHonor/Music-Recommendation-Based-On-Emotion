@@ -83,21 +83,14 @@ def recognizeVoice(tmp):
     import torch
     import torch.nn as nn
 
-    # In[2]:
-
 
     emotion = ['angry','calm','disgust','fearful','happy','neutral','sad','surprise']
 
-
-    # In[3]:
 
 
     from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
     le.fit_transform(emotion)
-
-
-    # In[4]:
 
 
     import torch
@@ -114,14 +107,8 @@ def recognizeVoice(tmp):
     print('Number of trainable params: ',sum(p.numel() for p in model.parameters()) )
 
 
-    # In[5]:
-
-
-    path = r'C:\Users\arz61\Documents\오픈소스'
+    path = './'
     model = torch.load(os.path.join(path,'model_300.pth'))
-
-
-    # In[7]:
 
 
     import librosa
@@ -144,31 +131,18 @@ def recognizeVoice(tmp):
         return signal
 
 
-    # In[9]:
-
-
     import joblib
     from sklearn.preprocessing import StandardScaler
     file_name = 'scaler.pkl'
     scaler = joblib.load(file_name)
 
 
-    # In[42]:
-
-
-    path = r'C:\Users\arz61\OneDrive\바탕 화면\음성인식'
+    path = './'
     sound = []
     hi=join(path, 'temp.wav')
     sound.append(load_audiofiles(hi))
 
-
-    # In[43]:
-
-
     sound
-
-
-    # In[44]:
 
 
     def Calculate_Melspectrogram(audio, sample_rate):
@@ -192,13 +166,7 @@ def recognizeVoice(tmp):
     print(f'mel_sound:{mel_sound.shape}')
 
 
-    # In[45]:
-
-
     mel_sound.shape
-
-
-    # In[46]:
 
 
     x_sound = np.expand_dims(mel_sound, 1)
@@ -209,9 +177,6 @@ def recognizeVoice(tmp):
     x_sound = np.reshape(x_sound, newshape=(b,c,h,w))
 
 
-    # In[47]:
-
-
     predicts1 = []
 
     t = torch.Tensor(np.expand_dims(x_sound[0], 0)).to(device)
@@ -220,22 +185,12 @@ def recognizeVoice(tmp):
     predicts1.append(predict1)
 
 
-    # In[48]:
-
-
     predicts1
 
 
-    # In[49]:
-
-
     answer = le.inverse_transform(predicts1)
-    answer[0]
-
-
-    # In[ ]:
-
-    # In[32]:
+    print(answer[0])
+    
 
 
     import urllib.parse
@@ -304,18 +259,10 @@ def recognizeVoice(tmp):
         melonList.append(temp)
         j+=1
 
-       print("완료!")
-
-
-    # In[ ]:
+        print("완료!")
 
 
     melon = pd.DataFrame(melonList)
-
-
-    # In[ ]:
-
-
     melonList1 = []
     for i in range (100):
         if answer[0] == 'happy':
@@ -365,12 +312,6 @@ def recognizeVoice(tmp):
                 
 
 
-    # In[ ]:
-
-
     with open('classified_melonList.csv', 'w', encoding='utf-8-sig', newline='') as f:
         writer = csv.writer(f)
         writer.writerows(melonList1)
-
-
-    # In[ ]:

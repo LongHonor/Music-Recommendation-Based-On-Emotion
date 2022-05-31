@@ -30,7 +30,7 @@ le.fit_transform(emotion)
 # In[6]:
 
 
-path = 'C:/Users/arz61/OneDrive/바탕 화면/4학년 1학기 홍혁기/오픈소스SW개론/melon chart/음성인식을통한 감정분류'
+path = './'
 file_list = os.listdir(path)
 file_list_py = [file for file in file_list if file.endswith('.csv')] ## 파일명 끝이 .csv인 경우
 
@@ -72,7 +72,7 @@ def load_audiofiles(file_name, sample_rate=48000):
 from tqdm import tqdm
 def load_data(data_info, isTrain=True):
     
-    PATH = "C:/Users/arz61/OneDrive/바탕 화면/4학년 1학기 홍혁기/오픈소스SW개론/melon chart/음성인식을통한 감정분류"
+    PATH = "./"
     if isTrain:
         train_data = []#음성 feature들을 담는 dictionary
         train_label = []#학습에 사용할 label을 담는 list
