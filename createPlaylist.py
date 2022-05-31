@@ -116,6 +116,7 @@ class playlistCreater:
     title = datetime.today().strftime("%Y%m%d")
     description = title + "의 플레이리스트"
     plid = self.createPlayList(title, description)
+    self.playlink = ytlinkfront + plid
 
     file = open("classified_melonList.csv", 'r', encoding = 'utf-8-sig')
     rdr = csv.reader(file)
@@ -123,7 +124,7 @@ class playlistCreater:
         searchWord = line[0] + ' ' + line[1]
         vid = self.getVideoIdBySearch(searchWord)
         self.insertionToPlayList(plid, vid)
-    self.playlink = ytlinkfront + plid
     file.close()
+   
     print(self.playlink)
     messagebox.showinfo("작업완료","플레이리스트 생성 완료")
