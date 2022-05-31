@@ -11,7 +11,7 @@ from apiclient.errors import HttpError
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
-
+from tkinter import messagebox
 
 # The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
 # the OAuth 2.0 information for this application, including its client_id and
@@ -119,7 +119,7 @@ class playlistCreater:
     description = title + "의 플레이리스트"
     plid = self.createPlayList(title, description)
 
-    file = open("melon100_utf8.csv", 'r', encoding = 'utf-8-sig')
+    file = open("classified_utf8.csv", 'r', encoding = 'utf-8-sig')
     rdr = csv.reader(file)
     for line in rdr:
         searchWord = line[0] + ' ' + line[1]
@@ -129,3 +129,4 @@ class playlistCreater:
 
     self.playlink = ytlinkfront + plid
     print(self.playlink)
+    messagebox.showinfo("작업 완료", "플레이리스트 생성완료")
